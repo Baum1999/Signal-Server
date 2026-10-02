@@ -134,7 +134,7 @@ public class ProfilesManagerTest {
     final String versionHex = HexFormat.of().formatHex(version);
     final byte[] name = TestRandomUtil.nextBytes(81);
     final VersionedProfileV1 profile = new VersionedProfileV1(versionHex, name, "someavatar", null, null,
-        null, null, "somecommitment".getBytes());
+        null, null, "somecommitment".getBytes(), null);
 
     when(commands.hget(eq(ProfilesManager.getCacheKeyV1(uuid)), aryEq(versionHex.getBytes()))).thenReturn(null);
     when(profilesV1.get(eq(uuid), eq(versionHex))).thenReturn(Optional.of(profile));
@@ -172,7 +172,7 @@ public class ProfilesManagerTest {
     final String versionHex = HexFormat.of().formatHex(version);
     final byte[] name = TestRandomUtil.nextBytes(81);
     final VersionedProfileV1 profile = new VersionedProfileV1(versionHex, name, "someavatar", null, null,
-        null, null, "somecommitment".getBytes());
+        null, null, "somecommitment".getBytes(), null);
 
     when(commands.hget(eq(ProfilesManager.getCacheKeyV1(uuid)), eq(versionHex.getBytes()))).thenThrow(new RedisException("Connection lost"));
     if (failUpdateCache) {
@@ -209,7 +209,7 @@ public class ProfilesManagerTest {
     final String versionHex = HexFormat.of().formatHex(version);
     final byte[] name = TestRandomUtil.nextBytes(81);
     final VersionedProfileV1 profile = new VersionedProfileV1(versionHex, name, "someavatar", null, null,
-        null, null, "somecommitment".getBytes());
+        null, null, "somecommitment".getBytes(), null);
 
     profilesManager.setV1(uuid, profile);
 
@@ -387,7 +387,7 @@ public class ProfilesManagerTest {
 
     final byte[] name = TestRandomUtil.nextBytes(81);
     final byte[] commitment = new ProfileKey(new byte[32]).getCommitment(new ServiceId.Aci(uuid)).serialize();
-    final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment);
+    final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment, null);
 
     final byte[] expectedCurrentDataHash = TestRandomUtil.nextBytes(32);
     final VersionedProfile profileV2 = new VersionedProfile(version, TestRandomUtil.nextBytes(128),
@@ -431,7 +431,7 @@ public class ProfilesManagerTest {
 
     final byte[] name = TestRandomUtil.nextBytes(81);
     final byte[] commitment = new ProfileKey(new byte[32]).getCommitment(new ServiceId.Aci(uuid)).serialize();
-    final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment);
+    final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment, null);
     
     final byte[] wrongHash = TestRandomUtil.nextBytes(32);
     final VersionedProfile profileV2 = new VersionedProfile(version, TestRandomUtil.nextBytes(128),
@@ -627,7 +627,7 @@ public class ProfilesManagerTest {
 
       final byte[] name = TestRandomUtil.nextBytes(81);
       final byte[] commitment = new ProfileKey(new byte[32]).getCommitment(new ServiceId.Aci(uuid)).serialize();
-      final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment);
+      final VersionedProfileV1 profileV1 = new VersionedProfileV1(versionHex, name, null, null, null, null, null, commitment, null);
 
       final VersionedProfile profileV2 = new VersionedProfile(version, TestRandomUtil.nextBytes(128),
           TestRandomUtil.nextBytes(32), TestRandomUtil.nextBytes(64),

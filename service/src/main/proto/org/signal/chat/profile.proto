@@ -99,6 +99,9 @@ message SetProfileV1Request {
 
   // The ciphertext of the phone-number sharing setting on the profile. 29-byte encrypted boolean.
   bytes phone_number_sharing = 6 [(require.exactlySize) = 29];
+
+  // The ciphertext of the IANA timezone id that users can set on their profile.
+  bytes timezone = 7 [(require.exactlySize) = 0, (require.exactlySize) = 68];
 }
 
 message SetV1AvatarRequest {
@@ -288,6 +291,8 @@ message LegacyProfileResult {
   bytes payment_address = 6;
   // Information about the targeted account
   AccountInfo account_info = 7;
+  // The ciphertext of the IANA timezone id on the profile.
+  bytes timezone = 8;
 }
 
 

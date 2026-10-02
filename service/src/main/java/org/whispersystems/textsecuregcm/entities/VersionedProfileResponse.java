@@ -51,6 +51,12 @@ public record VersionedProfileResponse(
     @JsonProperty
     @JsonSerialize(using = ByteArrayBase64WithPaddingAdapter.Serializing.class)
     @JsonDeserialize(using = ByteArrayBase64WithPaddingAdapter.Deserializing.class)
-    byte[] phoneNumberSharing) {
+    byte[] phoneNumberSharing,
+
+    @Schema(description = "Encrypted IANA timezone id. Padded base64.")
+    @JsonProperty
+    @JsonSerialize(using = ByteArrayBase64WithPaddingAdapter.Serializing.class)
+    @JsonDeserialize(using = ByteArrayBase64WithPaddingAdapter.Deserializing.class)
+    byte[] timezone) {
 
 }

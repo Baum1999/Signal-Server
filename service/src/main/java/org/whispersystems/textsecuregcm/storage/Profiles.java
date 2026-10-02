@@ -70,14 +70,18 @@ public class Profiles {
   // Commitment; byte array
   private static final String ATTR_COMMITMENT = "C";
 
-  private static final Map<String, String> UPDATE_EXPRESSION_ATTRIBUTE_NAMES = Map.of(
-      "#commitment", ATTR_COMMITMENT,
-      "#name", ATTR_NAME,
-      "#avatar", ATTR_AVATAR,
-      "#about", ATTR_ABOUT,
-      "#aboutEmoji", ATTR_EMOJI,
-      "#paymentAddress", ATTR_PAYMENT_ADDRESS,
-      "#phoneNumberSharing", ATTR_PHONE_NUMBER_SHARING);
+  // Timezone (IANA id ciphertext); byte array
+  private static final String ATTR_TIMEZONE = "T";
+
+  private static final Map<String, String> UPDATE_EXPRESSION_ATTRIBUTE_NAMES = Map.ofEntries(
+      Map.entry("#commitment", ATTR_COMMITMENT),
+      Map.entry("#name", ATTR_NAME),
+      Map.entry("#avatar", ATTR_AVATAR),
+      Map.entry("#about", ATTR_ABOUT),
+      Map.entry("#aboutEmoji", ATTR_EMOJI),
+      Map.entry("#paymentAddress", ATTR_PAYMENT_ADDRESS),
+      Map.entry("#phoneNumberSharing", ATTR_PHONE_NUMBER_SHARING),
+      Map.entry("#timezone", ATTR_TIMEZONE));
 
   private static final Timer SET_PROFILES_TIMER = Metrics.timer(name(Profiles.class, "set"));
   private static final Timer GET_PROFILE_TIMER = Metrics.timer(name(Profiles.class, "get"));
@@ -167,6 +171,12 @@ public class Profiles {
       deletedAttributes.add("phoneNumberSharing");
     }
 
+    if (profile.timezone() != null) {
+      updatedAttributes.add("timezone");
+    } else {
+      deletedAttributes.add("timezone");
+    }
+
     final StringBuilder updateExpressionBuilder = new StringBuilder(
         "SET #commitment = if_not_exists(#commitment, :commitment)");
 
@@ -217,6 +227,10 @@ public class Profiles {
     if (profile.phoneNumberSharing() != null) {
       expressionValues.put(":phoneNumberSharing", AttributeValues.fromByteArray(profile.phoneNumberSharing()));
     }
+
+    if (profile.timezone() != null) {
+      expressionValues.put(":timezone", AttributeValues.fromByteArray(profile.timezone()));
+    }
     return expressionValues;
   }
 
@@ -241,7 +255,8 @@ public class Profiles {
         getBytes(item, ATTR_ABOUT),
         getBytes(item, ATTR_PAYMENT_ADDRESS),
         getBytes(item, ATTR_PHONE_NUMBER_SHARING),
-        AttributeValues.getByteArray(item, ATTR_COMMITMENT, null));
+        AttributeValues.getByteArray(item, ATTR_COMMITMENT, null),
+        getBytes(item, ATTR_TIMEZONE));
   }
 
   private static byte[] getBytes(final Map<String, AttributeValue> item, final String attributeName) {

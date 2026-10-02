@@ -100,7 +100,7 @@ class ProfileHelperTest {
           TestRandomUtil.nextBytes(16),
           TestRandomUtil.nextBytes(16),
           TestRandomUtil.nextBytes(16),
-          TestRandomUtil.nextBytes(16)));
+          TestRandomUtil.nextBytes(16), null));
       case CURRENT_PROFILE, NONE -> Optional.empty();
     };
 

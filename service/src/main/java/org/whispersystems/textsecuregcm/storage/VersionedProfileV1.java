@@ -39,7 +39,11 @@ public record VersionedProfileV1(String version,
 
                                  @JsonSerialize(using = ByteArrayAdapter.Serializing.class)
                                  @JsonDeserialize(using = ByteArrayAdapter.Deserializing.class)
-                                 byte[] commitment) {
+                                 byte[] commitment,
+
+                                 @JsonSerialize(using = ByteArrayBase64WithPaddingAdapter.Serializing.class)
+                                 @JsonDeserialize(using = ByteArrayBase64WithPaddingAdapter.Deserializing.class)
+                                 byte[] timezone) {
 
   @Override
   public boolean equals(final Object o) {
@@ -49,7 +53,7 @@ public record VersionedProfileV1(String version,
     return Arrays.equals(name, that.name) && Arrays.equals(about, that.about) && Objects.equals(avatar, that.avatar)
         && Objects.equals(version, that.version) && Arrays.equals(aboutEmoji, that.aboutEmoji) && Arrays.equals(
         commitment, that.commitment) && Arrays.equals(paymentAddress, that.paymentAddress) && Arrays.equals(
-        phoneNumberSharing, that.phoneNumberSharing);
+        phoneNumberSharing, that.phoneNumberSharing) && Arrays.equals(timezone, that.timezone);
   }
 
   @Override
@@ -62,6 +66,7 @@ public record VersionedProfileV1(String version,
         Arrays.hashCode(about),
         Arrays.hashCode(paymentAddress),
         Arrays.hashCode(phoneNumberSharing),
-        Arrays.hashCode(commitment));
+        Arrays.hashCode(commitment),
+        Arrays.hashCode(timezone));
   }
 }

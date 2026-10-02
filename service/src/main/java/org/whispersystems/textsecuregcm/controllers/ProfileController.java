@@ -205,7 +205,8 @@ public class ProfileController {
             request.about(),
             request.paymentAddress(),
             request.phoneNumberSharing(),
-            request.commitment().serialize()));
+            request.commitment().serialize(),
+            request.timezone()));
 
     if (request.getAvatarChange() != CreateProfileRequest.AvatarChange.UNCHANGED) {
       currentAvatar.ifPresent(profilesManager::deleteAvatar);
@@ -492,6 +493,7 @@ public class ProfileController {
     final byte[] aboutEmoji = maybeProfile.map(VersionedProfileV1::aboutEmoji).orElse(null);
     final String avatar = maybeProfile.map(VersionedProfileV1::avatar).orElse(null);
     final byte[] phoneNumberSharing = maybeProfile.map(VersionedProfileV1::phoneNumberSharing).orElse(null);
+    final byte[] timezone = maybeProfile.map(VersionedProfileV1::timezone).orElse(null);
 
     // Allow requests where either the version matches the latest version on Account or the latest version on Account
     // is empty to read the payment address.
@@ -502,7 +504,7 @@ public class ProfileController {
 
     return new VersionedProfileResponse(
         buildBaseProfileResponseForAccountIdentity(account, isSelf, containerRequestContext),
-        name, about, aboutEmoji, avatar, paymentAddress, phoneNumberSharing);
+        name, about, aboutEmoji, avatar, paymentAddress, phoneNumberSharing, timezone);
   }
 
   private BaseProfileResponse buildBaseProfileResponseForAccountIdentity(final Account account,

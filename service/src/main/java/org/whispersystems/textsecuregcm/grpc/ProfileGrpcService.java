@@ -159,7 +159,8 @@ public class ProfileGrpcService extends SimpleProfileGrpc.ProfileImplBase {
         request.getV1Request().getAbout().toByteArray(),
         request.getPaymentAddress().isEmpty() ? null : request.getPaymentAddress().toByteArray(),
         request.getV1Request().getPhoneNumberSharing().toByteArray(),
-        commitment);
+        commitment,
+        request.getV1Request().getTimezone().toByteArray());
 
     final VersionedProfile profile = new VersionedProfile(version,
         request.getData().toByteArray(),

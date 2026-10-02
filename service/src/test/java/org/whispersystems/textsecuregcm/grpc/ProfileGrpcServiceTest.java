@@ -227,6 +227,7 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
     final byte[] validAbout = new byte[540];
     final byte[] validPaymentAddress = new byte[582];
     final byte[] validPhoneNumberSharing = new byte[29];
+    final byte[] validTimezone = new byte[68];
 
     final SetProfileRequest request = SetProfileRequest.newBuilder()
         .setVersion(ByteString.copyFrom(VERSION))
@@ -238,6 +239,7 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
             .setAboutEmoji(ByteString.copyFrom(validAboutEmoji))
             .setAbout(ByteString.copyFrom(validAbout))
             .setPhoneNumberSharing(ByteString.copyFrom(validPhoneNumberSharing))
+            .setTimezone(ByteString.copyFrom(validTimezone))
         )
         .build();
 
@@ -267,6 +269,7 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
     assertThat(v1Profile.about()).isEqualTo(validAbout);
     assertThat(v1Profile.paymentAddress()).isEqualTo(validPaymentAddress);
     assertThat(v1Profile.phoneNumberSharing()).isEqualTo(validPhoneNumberSharing);
+    assertThat(v1Profile.timezone()).isEqualTo(validTimezone);
   }
 
   @Test
@@ -619,10 +622,11 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
     final byte[] about = TestRandomUtil.nextBytes(156);
     final byte[] paymentAddress = TestRandomUtil.nextBytes(582);
     final byte[] phoneNumberSharing = TestRandomUtil.nextBytes(29);
+    final byte[] timezone = TestRandomUtil.nextBytes(68);
     final String avatar = "profiles/" + ProfileTestHelper.generateRandomBase64FromByteArray(16);
 
     final Optional<VersionedProfileV1> profile = Optional.of(new VersionedProfileV1(HexFormat.of().formatHex(requestVersion), name, avatar, emoji, about, paymentAddress,
-        phoneNumberSharing, new byte[0]));
+        phoneNumberSharing, new byte[0], timezone));
 
     final GetProfileRequest request = GetProfileRequest.newBuilder()
         .setAccountIdentifier(ServiceIdentifier.newBuilder()
@@ -651,6 +655,7 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
         .setAboutEmoji(ByteString.copyFrom(emoji))
         .setAvatar(avatar)
         .setPhoneNumberSharing(ByteString.copyFrom(phoneNumberSharing))
+        .setTimezone(ByteString.copyFrom(timezone))
         .setAccountInfo(AccountInfo.newBuilder()
             .addAllBadgeIds(badgeIds)
             .setIdentityKey(ByteString.copyFrom(identityKey.serialize()))
@@ -918,7 +923,7 @@ public class ProfileGrpcServiceTest extends SimpleBaseGrpcTest<ProfileGrpcServic
         null,
         TestRandomUtil.nextBytes(582),
         TestRandomUtil.nextBytes(32)
-    );
+    , null);
 
     when(profilesManager.getV1(AUTHENTICATED_ACI, profile.version()))
         .thenReturn(Optional.of(profile));

@@ -180,7 +180,7 @@ public class ProfileAnonymousGrpcServiceTest extends SimpleBaseGrpcTest<ProfileA
     final byte[] phoneNumberSharing = TestRandomUtil.nextBytes(29);
     final String avatar = "profiles/" + ProfileTestHelper.generateRandomBase64FromByteArray(16);
 
-    final Optional<VersionedProfileV1> profile = Optional.of(new VersionedProfileV1(HexFormat.of().formatHex(requestVersion), name, avatar, emoji, about, paymentAddress, phoneNumberSharing, new byte[0]));
+    final Optional<VersionedProfileV1> profile = Optional.of(new VersionedProfileV1(HexFormat.of().formatHex(requestVersion), name, avatar, emoji, about, paymentAddress, phoneNumberSharing, new byte[0], null));
 
     when(account.getCurrentProfileVersion()).thenReturn(Optional.ofNullable(accountVersion));
     when(account.isUnrestrictedUnidentifiedAccess()).thenReturn(false);

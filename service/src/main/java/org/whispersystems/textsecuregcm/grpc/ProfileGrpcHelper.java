@@ -73,6 +73,9 @@ public class ProfileGrpcHelper {
     if (v1Profile.phoneNumberSharing() != null) {
       builder.setPhoneNumberSharing(ByteString.copyFrom(v1Profile.phoneNumberSharing()));
     }
+    if (v1Profile.timezone() != null) {
+      builder.setTimezone(ByteString.copyFrom(v1Profile.timezone()));
+    }
     if (v1Profile.avatar() != null) {
       builder.setAvatar(v1Profile.avatar());
     }
